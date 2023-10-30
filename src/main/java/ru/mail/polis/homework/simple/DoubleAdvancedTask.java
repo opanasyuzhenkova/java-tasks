@@ -1,4 +1,5 @@
 package ru.mail.polis.homework.simple;
+
 import org.apache.commons.math3.analysis.solvers.LaguerreSolver;
 import org.apache.commons.math3.complex.Complex;
 
@@ -19,7 +20,7 @@ public class DoubleAdvancedTask {
      * Пример: (1, -4, -7, 10) -> "-2.0, 1.0, 5.0"
      */
     public static String equation(int a, int b, int c, int d) {
-        double[] coefficients = { d, c, b, a };
+        double[] coefficients = {d, c, b, a};
 
         LaguerreSolver solver = new LaguerreSolver();
         Complex[] complexRoots = solver.solveAllComplex(coefficients, 0);
@@ -45,7 +46,7 @@ public class DoubleAdvancedTask {
             x2 = temp;
         }
 
-        return x1 + ", " +  x2 + ", " +  x3;
+        return x1 + ", " + x2 + ", " + x3;
     }
 
     /**
@@ -55,11 +56,24 @@ public class DoubleAdvancedTask {
      * y = ax+ b => x = (y - b)/a
      */
     public static float length(double a1, double b1, double a2, double b2) {
-        double y1 = a1 * 0 + b1;
-        double y2 = a2 * 5 + b2;
+        double result;
 
-        double dist = (Math.sqrt(Math.pow((5 - 0), 2) + Math.pow((y2 - y1), 2)));
-        return (float) dist;
+        if (a1 == a2) {
+            result = Math.abs(b2 - b1) / Math.sqrt(a1 * a1 + 1);
+            return (float) result;
+        }
+
+        if (a1 * b2 - a2 * b1 != 0) {
+            return 0;
+        }
+
+//        if (a1 == a2 && a1 == 0) {
+//            return (float) (b2 - b1);
+//        }
+        result = Math.abs(b2 - b1) / Math.sqrt(a1 * a1 + a2 * a2);
+        System.out.println((float) b2 - b1);
+        return (float) result;
+
     }
 
     /**
@@ -74,12 +88,31 @@ public class DoubleAdvancedTask {
                                          int x2, int y2, int z2,
                                          int x3, int y3, int z3,
                                          int x4, int y4) {
-        return 0;
+        double ABx = x2 - x1;
+        double ABy = y2 - y1;
+        double ABz = z2 - z1;
+
+        double ACx = x3 - x1;
+        double ACy = y3 - y1;
+        double ACz = z3 - z1;
+
+        // Находим нормаль к плоскости (N)
+        double Nx = ABy * ACz - ABz * ACy;
+        double Ny = ABz * ACx - ABx * ACz;
+        double Nz = ABx * ACy - ABy * ACx;
+
+        // Находим коэффициент D
+        double D = -(Nx * x1 + Ny * y1 + Nz * z1);
+
+        // Рассчитываем Z4
+        return (-D - Nx * x4 - Ny * y4) / Nz;
+
+
     }
 
     public static void main(String[] args) {
-        System.out.println(equation(1,-4,-7,10));
-        System.out.println(length(1,1,2,-1));
+//        System.out.println(equation(1, -4, -7, 10));
+        System.out.println(length(1, 1, 2, -1));
 
     }
 }
